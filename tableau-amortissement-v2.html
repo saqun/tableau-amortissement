@@ -1,0 +1,693 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Tableau d'amortissement d'un credit immobilier</title> 
+<style type="text/css">
+#div_finance_main {
+	margin: auto; /* automatically centered */
+	//background-color: gray;
+	//width: 800px;
+	padding: 20px;
+}
+
+#div_amortissement {
+	//background-color: yellow;
+	padding: 20px;
+	//border: 2px solid red;
+	//margin-top: 20px;
+}
+
+label {
+	display: block; /* label devient de type block (largeur modifiable) au lieu de inline
+					 * block => provoque un retour a la ligne (comme p par exemple)
+					 */
+	width: 200px;
+	float: left; /* eviter le retour a la ligne */
+	font-family: Roboto,sans-serif;
+	font-size: 14px;
+	font-weight: 800;
+	text-transform: uppercase;
+}
+input {
+	margin-bottom: 5px;
+	text-align: right;
+	padding: 5px;
+}
+
+#tab_amortissement, .tab_amortissement_style {
+	border-width: 1px;
+	border-style: solid;
+	padding: 0px;
+	width: 70%;
+	/* margin: auto; /* auto centered */
+	border-collapse: collapse;
+
+}
+#tab_amortissement th {
+	border-style: solid;
+	border-width: 1px;
+	width : 20%;
+}
+#tab_amortissement th:nth-child(1) {
+	border-style: solid;
+	border-width: 1px;
+	width : 15%;
+}
+#tab_amortissement td  {
+	border-style: solid;
+	border-width: 1px;
+	text-align: right;
+	padding-right : 15px;
+}
+#tab_head th {
+	text-align: left;
+	padding-left: 50px;
+	padding-bottom: 20px;
+}
+#tab_resume {
+			border-collapse: collapse;
+}
+
+#tab_resume th {
+			text-align: center;
+			background-color: #ff6666;
+			color: white;
+			font-weight: 9000; 
+			font-family: Georgia, "Times New Roman", Times, serif;
+
+			padding-left: 10px;
+			padding-right: 10px;
+			padding-bottom: 0px;
+			
+}
+#tab_resume_values td {
+		padding-left : 10px;
+		text-align: center;
+		color: red;
+		
+		border-style: solid;
+		border-width: 1px;
+		border-color: red;
+		font-weight: bold; 
+		padding-top: 10px;
+		padding-bottom: 10px;
+
+	letter-spacing:0.2em;
+}
+
+#tab_desc_itm {
+	background-color: green;
+	color: white;
+	font-weight: 9000; 
+	font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+tr:nth-child(13n+14) {
+	background-color: black;
+	color: white;
+	font-family: "Trebuchet MS", Tahoma, Arial, sans-serif;
+	letter-spacing:0.2em;
+	font-weight: bold; // normal, 9000; 
+}
+
+#div_tab_resume {
+	margin-bottom: 10px;
+}
+
+#tab_resume_text {
+	background-color:black; //#0e67d3; // #f45c42;
+	background: red; /* For browsers that do not support gradients */
+	background: -webkit-linear-gradient(left top, red, yellow); /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(bottom right, red, yellow); /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(bottom right, red, yellow); /* For Firefox 3.6 to 15 */
+	//background: linear-gradient(to bottom right, red, yellow); /* Standard syntax */
+	background: linear-gradient(violet, blue); /* Standard syntax */
+    //background: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet); 
+
+	padding: 10px;
+	color: white;
+	padding-left: 30px;
+	padding-right: 30px;
+	font-size: small; // xx-small, x-small, small
+}
+#tab_resume_text td:nth-child(2n) {
+	text-align: right;
+	font-family: "Trebuchet MS", Tahoma, Arial, sans-serif;
+	letter-spacing:0.2em;
+	font-weight: normal; // , normal, bold, 9000; 
+	padding-left: 10px;
+
+}
+#tab_resume_text td:nth-child(3n) {
+//border-style: dotted;
+//border-left:  thin dashed #ff0000;
+	text-align: left;
+	font-family: "Trebuchet MS", Tahoma, Arial, sans-serif;
+	letter-spacing:0.2em;
+	font-weight: normal; // , normal, bold, 9000; 
+	padding-left: 0px;
+
+}
+
+#div_tableau_amortissement_title {
+	float: left;
+	margin-right: 80px;
+	text-align: center;
+}
+
+.thead_tab_amortissement_style:hover {
+	background-color:green;
+	color: white;
+}
+
+.tab_amortissement_style thead {
+	background-color: pink;
+	color: white;
+	font-family: "Trebuchet MS", Tahoma, Arial, sans-serif;
+	letter-spacing:0.2em;
+	font-weight: bold; // normal, 9000; 
+}
+.tab_amortissement_style thead tr td {
+	border-left:  thin dashed white;
+	text-align:  right;
+	width: 20%;
+}
+
+.tab_amortissement_style tbody tr td, .tab_amortissement_style thead tr td {
+	text-align:  right;
+	width: 20%;
+	border-left:  thin solid blue;
+	padding-right: 20px;
+}
+
+.tab_amortissement_style tbody tr td:nth-child(1), .tab_amortissement_style thead tr td:nth-child(1) {
+	text-align:  center;
+	width: 15%;
+	border-left:  thin solid blue;
+}
+.tab_amortissement_style {
+	margin-bottom: 10px;
+}
+
+/*http://www.bestcssbuttongenerator.com/
+<a href="#" class="myButton">green</a>
+*/	 	
+.myButton {
+	background-color:#44c767;
+	-moz-border-radius:21px;
+	-webkit-border-radius:21px;
+	border-radius:21px;
+	border:5	px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:22px;
+	padding:11px 63px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+}
+.myButton:hover {
+	background-color:#5cbf2a;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+.inputNumber {
+    //float: left;
+    width: 200px;
+    padding: 5px 6px 3px 0;
+    //margin: 3px 0 0;
+    color: #000;
+    font-size: 15px;
+    text-align: right;
+    border: 1px solid #dfdfdf;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    background-color: #fff;
+    -moz-box-shadow: 0 2px 0 #dfdfdf;
+    -webkit-box-shadow: 0 2px 0 #dfdfdf;
+    box-shadow: 0 2px 0 #dfdfdf;
+    font-family: Roboto,sans-serif;
+    font-weight: 900;
+    outline: 0;
+}
+
+.rowInput span {
+    color: #000;
+   // float: left;
+    font-size: 15px;
+    letter-spacing: -1px;
+    padding: 13px 5px 0;
+    font-weight: 700;
+}
+
+.rowInput h1 {
+	//background-color: black;
+	//color: white;
+	//text-transform: uppercase;
+}  
+		
+</style>
+<script src="https://code.jquery.com/jquery-3.1.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).on('click', 'thead', function () {
+	var myid = this.id;
+	if (myid.substr(0,6) == "thead_") {
+		myid = myid.substr(6);
+		//myid = '#' + myid;
+		myid = '#' + myid + "tdby";
+		
+		$(myid).toggle();
+	}
+});
+/*
+$(document).on('keyup', 'input', function () {
+alert("abc");
+	var myid = this.id;
+	alert(myid);
+	if (myid == "taux") {		
+		if(isNumeric($(this).val()) { 
+            $(this).css({
+         		 borderColor : 'green', 
+          		color : 'green' 
+     		 }); 
+         } else { 
+		     $(this).css({ // on rend le champ rouge 
+                borderColor : 'red', 
+         		color : 'red' 
+            }); 
+
+          } 
+    } 
+});
+*/
+
+
+
+
+// 
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+// round 
+
+function round(value)
+ {
+	var val = Math.round(value * 100)/100;
+	return val;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+// tr_id : id of tr to createElement
+// td_th : 1 = create TD, create TH ortherwise
+// tdIds: list of TD value, TD (value, name) or TD (value, name, id) 
+//   
+
+function create_tr(trId, td_or_th, tdValOrValName) {
+
+    var tr = document.createElement("tr");
+    tr.setAttribute("id", trId);
+	var td, txt;
+
+	var tdh = (td_or_th?"td": "th");
+	for (i = 0; i < tdValOrValName.length; i++) { 
+		var curObj = tdValOrValName[i];
+		td = document.createElement(tdh);
+		if (typeof(curObj) == "object") {
+			var len = curObj.length;
+			// array is of the form {value, id}
+			// or {value, name, id}
+			txt = document.createTextNode(curObj[0]);
+			if (len >= 1) {
+				td.setAttribute("name", curObj[1]);
+			}
+			if (len >= 2) {
+				td.setAttribute("id", curObj[2]);
+			}
+			// ignore the rest of array object			
+		} else {
+			txt = document.createTextNode(curObj);
+		}
+		td.appendChild(txt);
+		tr.appendChild(td);
+	}
+	return tr;
+}
+
+
+function tab_add_head(thd, annee, capital, interet, mensuel, restant_du) {
+	//alert(annee);
+
+	var id = "trId_" + annee;
+	var tdAnneeId = "tdAnneeId_" + annee;
+	var tdAnneeName = "tdAnneeName_" + annee;
+	var TD0 = ["Annee " + annee, tdAnneeName, tdAnneeId];
+	var arr = [TD0, capital, interet.toFixed(2), mensuel.toFixed(2), restant_du.toFixed(2)];
+	
+	//alert("c" + capital + ", i="+interet+ "m=" + mensuel + "res= "+restant_du);
+
+	var tr = create_tr(id , 1, arr);
+	thd.appendChild(tr);
+}
+
+function add_row_to_tableau_amortissement(tbdy, mois, capital, interet, mensuel, restant_du) {
+		
+    var tr = document.createElement("tr");
+    tr.setAttribute("id", "myTr"+mois);
+	tbdy.appendChild(tr);
+
+    var td = document.createElement("td");
+    var txt = document.createTextNode(mois);
+    td.appendChild(txt);
+	tr.appendChild(td);
+	
+	
+	td = document.createElement("TD");
+    txt = document.createTextNode(capital.toFixed(2));
+    td.appendChild(txt);
+	tr.appendChild(td);
+	
+	td = document.createElement("TD");
+    txt = document.createTextNode(interet.toFixed(2));
+    td.appendChild(txt);
+	tr.appendChild(td);
+
+
+	td = document.createElement("TD");
+    txt = document.createTextNode(mensuel.toFixed(2));
+    td.appendChild(txt);
+	tr.appendChild(td);
+
+	td = document.createElement("TD");
+    txt = document.createTextNode(restant_du.toFixed(2));
+    td.appendChild(txt);
+	tr.appendChild(td);	
+	
+}
+
+function remove_table_rows(tabId) {
+
+	//document.getElementById("div_tab_amortissement").innerHTML = "";
+	$('#div_tab_amortissement').html('');
+	
+	//$('#'+tabId).children().remove();
+	
+	var tab = document.getElementById(tabId);
+	var ll = tab.rows.length;
+
+	for (var x=1; x < ll; x++) {	
+		tab.deleteRow(1);
+	}
+	
+}
+
+/**********************************************************************************
+*/
+function tableau_amortissement_resume(capital, taux, duree, mensualite, interets) {
+
+	var tmp = document.getElementById("resume_montant_emprunt"); tmp.innerHTML = capital; 
+	tmp = document.getElementById("resume_taux");  tmp.innerHTML = taux;
+	tmp = document.getElementById("resume_taux_2");  tmp.innerHTML = "  %";
+
+	tmp = document.getElementById("resume_duree");    tmp.innerHTML = duree;
+	tmp = document.getElementById("resume_duree_2");  tmp.innerHTML = "  ans";
+
+	tmp = document.getElementById("resume_mensualite");  tmp.innerHTML = Math.floor(mensualite); 
+	var val = round(mensualite - Math.floor(mensualite)) * 100;
+	tmp = document.getElementById("resume_mensualite_2");  tmp.innerHTML = "." + ((val < 10)?"0"+val:val); 
+
+	tmp = document.getElementById("resume_interets"); tmp.innerHTML = Math.floor(interets);  
+	val = Math.floor(round(interets - Math.floor(interets)) * 100);
+	tmp = document.getElementById("resume_interets_2");  tmp.innerHTML =  "." + ((val < 10)?"0"+val:val); 
+
+	var cap_plus_interets = interets+capital;
+
+	tmp = document.getElementById("resume_total_mensualites"); tmp.innerHTML =  Math.floor(cap_plus_interets);
+	val = Math.floor(round(cap_plus_interets - Math.floor(cap_plus_interets)) * 100);
+	tmp = document.getElementById("resume_total_mensualites_2");  tmp.innerHTML = "." + ((val < 10)?"0"+val:val); 
+}
+	
+
+/**************************************************************************************************************
+ * Etabilit un taux d'armortissement a partir de donnees utilisateur
+ * + affiche info sur le credit
+ */
+
+function tableau_amortissement() {
+
+	var capital = parseFloat(document.getElementById("capital").value);
+	var taux_an = parseFloat(document.getElementById("taux").value);
+	var taux    = taux_an/(12*100); // taux mensuel
+
+	var duree    = parseFloat(document.getElementById("duree").value);
+
+	remove_table_rows("tab_amortissement");
+
+	// calcul et creee un tableau d'amortissement
+	var emprunt = calcul_tableau_amortissement(capital, taux_an, duree, "div_tab_amortissement"); 
+
+	// Afficher le resume du credit 
+	//	var emprunt = {interets:interet_total, mensualite:mensualite , capital:capital, taux:taux_an, duree:duree };
+
+	tableau_amortissement_resume(capital, emprunt.taux, emprunt.duree, emprunt.mensualite, emprunt.interets);
+		
+	return false;
+} 
+
+/******************************************************************************************************************
+ * capital : capital d'emprunt
+ * taux_an: taux de credit annuel
+ * duree : duree de pret en annees
+ * function returns a strcutre of the form 
+ * Creer des tableaux d'amortissement comme ci-dessous:
+ *   {interets:interet_total, mensualite:mensualite , capital:capital, taux:taux_an, duree:duree };
+ *
+ *
+	* -- annee x  cpital interets mensualite resant du
+	* -- mois  1   cpital interets mensualite resant du 
+	* -- mois  2   cpital interets mensualite resant du 
+	* -- mois ..   cpital interets mensualite resant du 
+	* -- mois 11   cpital interets mensualite resant du 
+	* -- mois 12   cpital interets mensualite resant du 
+    * .....
+	* -- annee x  cpital interets mensualite resant du
+	* -- mois  1   cpital interets mensualite resant du 
+	* -- mois  2   cpital interets mensualite resant du 
+	* -- mois ..   cpital interets mensualite resant du 
+	* -- mois 11   cpital interets mensualite resant du 
+	* -- mois 12   cpital interets mensualite resant du 
+	*
+	*
+	
+	* Applied formulas (used 3rd one):
+	* http://images.math.cnrs.fr/emprunts-mensualites-interet-taux.html?lang=fr
+	* formule 1
+	* echeance = captial * txPer * (1+txPer)^n / [(1+txPer)^n - 1]
+	*
+	*  <==> echeance = captial * txPer / [1 - (1+txPer)^-n]
+	* txPer = (1+TxAn)^(1/n) - 1
+	*
+	* formule 2
+	* m = (K * t/12) / ( 1 - (1+t/12)^(-n))
+	*
+	* formule 3
+	* m = K * t * (t + 1)^n /( (1+t)^n - 1)
+	*
+ *****************************************************************************************************************/
+ 
+function calcul_tableau_amortissement(capital, taux_an, duree, div_placeholder) {
+
+	var taux    = taux_an/(12*100); // taux mensuel	
+	var mois    = duree * 12; // duree du pret en mois
+
+	/* Formule mathematique pour calculer la mensualite: 
+	 * mensualite = K * t * (t + 1)^n /( (1+t)^n - 1)
+	 */
+
+    var mensualite = (capital * taux * Math.pow(1+taux, mois)) / (Math.pow(1+taux, mois) - 1);
+	mensualite = round(mensualite); 
+	
+	var capital_restant_du = capital, interet_total=0;
+	
+	var tab;
+	for (var annee = 1; annee <= duree; annee++) {
+	
+		var div = document.getElementById(div_placeholder);	 
+
+		// create table with id=tab_amortissement_N+annee, class=tab_amortissement_style
+		var tabId = "tab_amortissement_N" + annee;
+		var tabClass = "tab_amortissement_style";				
+		tab = document.createElement("table");
+		tab.setAttribute("id", tabId);
+		tab.className = tabClass;		
+		div.appendChild(tab);
+		
+		// create tbody
+		var tbdyId = "tab_amortissement_N" + annee + "tdby";
+		var tbdy = document.createElement('tbody');
+		tbdy.setAttribute("id", tbdyId);
+		tab.appendChild(tbdy);
+
+		// cretate thead
+		var tbhdId = "thead_tab_amortissement_N" + annee;
+		var tbhdStyle = "thead_tab_amortissement_style";
+	
+		var thd = document.createElement('thead');
+		thd.setAttribute("id", tbhdId);
+		thd.className = tbhdStyle;
+		tab.appendChild(thd);
+
+		// 
+		var cap_deb_period = capital_restant_du;
+		
+		var interet_1mois, interet_12m = 0, k_rembourse_12m = 0;
+		var capital_rembourse_1mois;
+		for (var i=1; i <= 12; i++) {
+			interet_1mois = round(capital_restant_du * taux);
+			interet_12m += interet_1mois;
+			interet_total += interet_1mois;
+
+			capital_rembourse_1mois = round(mensualite - interet_1mois);
+			k_rembourse_12m += capital_rembourse_1mois;
+
+			var capital_avant_remb = capital_restant_du;
+			capital_restant_du = round(capital_restant_du - capital_rembourse_1mois);
+		
+			//
+			add_row_to_tableau_amortissement(tbdy, i, capital_avant_remb, interet_1mois, capital_rembourse_1mois, capital_restant_du);
+		}
+		
+		//tab_add_head(thd, annee, cap_deb_period, interet_12m.toFixed(2), capital_rembourse_12m.toFixed(2), capital_restant_du);	
+		k_rembourse_12m = round(k_rembourse_12m);
+		interet_12m = round(interet_12m);
+		tab_add_head(thd, annee, cap_deb_period, interet_12m, k_rembourse_12m, capital_restant_du);	
+	}
+	
+	var emprunt = {interets:interet_total, mensualite:mensualite , capital:capital, taux:taux_an, duree:duree };
+	return emprunt;
+}
+
+//
+function isNumberKey(evt){
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
+function isCorrectTaux(event) {
+ 		if(isNumeric($('#taux').val())) { 
+            $('#taux').css({
+         		 borderColor : 'green', 
+          		color : 'green' 
+     		 });
+			return true;
+         } else { 
+		     $('#taux').css({ // on rend le champ rouge 
+                borderColor : 'red', 
+         		color : 'red' 
+            }); 
+			return false;
+         }   
+}
+
+</script>
+
+</head>	
+
+<body>
+<div id="div_finance_main">
+
+<!-----------------------------------------------------------------------------------------------------> 
+<div id="div_amortissement" class="rowInput">
+<h1 class="h1_info"> Calcul des mensualités de votre prêt immobilier </h1>
+<form id="form_tab_amortissement" action="" method="post"> 
+
+ <label for="capital"> MONTANT DU PRÊT </label> <input type="text" class="intput_fld inputNumber" id="capital" value="120000" onkeypress="return isNumberKey(event)"><span>€</span> <br>
+ <label for="taux"> TAUX D'INTÉRÊT </label> <input type=="number" step="0.01" class="intput_fld inputNumber" id="taux" value="0.4" onkeyup="return isCorrectTaux(event)"><span>%</span> <br>
+ <label for="duree"> DURÉE DU PRÊT </label> <input type="number" class="intput_fld inputNumber" id="duree" value="10" onkeypress="return isNumberKey(event)"> <span>ans</span>
+<!--
+ <label for="duree"> DURÉE DU PRÊT </label> <input type="number" step="1" class="intput_fld inputNumber" id="duree" value="10"> <span>ans</span>
+
+ <input type="radio" id="radio_mois" name="radio_btn_mois_annee" value="Mois" checked> Mois
+ <input type="radio" id="radio_annee" name="radio_btn_mois_annee" value="Annee" > An(s)
+ 
+ //-->
+
+ <!--select>
+  <option value="mois" selected>Mois</option>
+  <option value="annee">Annee</option>
+</select-->
+
+ <br>
+
+  <input type="submit" class="myButton" value="Tableau amortissement" onClick="return tableau_amortissement();">
+
+ </form>
+ 
+<hr>
+  
+	<div id="div_tab_resume">
+		<div id="div_tableau_amortissement_title">
+			<H3>TABLEAU D'AMORTISSEMENT</H3> 
+		</div>
+ 		
+		<div id="div_resume_text">
+			<table id="tab_resume_text">
+				<tr> 
+					<td class="credit_resume resume_montant_emprunt"> Montant de l'emprunt: </td> 
+					<td id="resume_montant_emprunt"> 0 </td> 
+					<td id="resume_montant_emprunt_2"> </td>
+				</tr> <tr> 
+					<td class="credit_resume resume_taux"> Taux annuel: </td> 
+					<td id="resume_taux"> 0 </td> 
+					<td id="resume_taux_2"> 0 </td> 
+				</tr> <tr> 
+					<td class="credit_resume resume_duree"> Durée du pret: </td> 
+					<td id="resume_duree"> 0 </td> </td> 
+					<td id="resume_duree_2"> </td> 
+				</tr> <tr> 
+					<td class="credit_resume resume_mensualite"> Mensualité du crédit: </td> 
+					<td id="resume_mensualite"> 0 </td> 
+					<td id="resume_mensualite_2"> 0 </td> 
+</tr> <tr> 
+					<td class="credit_resume resume_interets"> Total des interets: </td>
+					<td id="resume_interets"> 0 </td> 
+					<td id="resume_interets_2"> 0 </td> 
+				</tr> <tr> 
+					<td class="credit_resume resume_total_mensualites"> Total des mensualités: </td> 
+					<td id="resume_total_mensualites"> 0 </td> 
+					<td id="resume_total_mensualites_2"> 0 </td> 
+				</tr>
+			</table>
+		</div>
+  
+	</div>
+
+   <table id="tab_amortissement">
+    <tr id="tab_desc_itm">
+    <th>Mois</th>
+	<th>Capital</th>
+    <th>Interet</th> 
+    <th>Mensualite</th>
+    <th>Capital restant du</th>	
+  </tr>
+  </table>
+  <div id="div_tab_amortissement">
+  </div>
+</div>
+<!----------------------------------------------------------------------------------------------------->
+
+</div> <!-------------------------------->
+		
+</body>
+
+</html>
